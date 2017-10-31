@@ -1,14 +1,29 @@
 import sys
 import tkinter
+from tkinter import messagebox
 
 panel = tkinter.Tk()
-panel.title("fumi's reversi")
+panel.title("fumi's")
 panel.geometry("700x700")
 
 def DeleteEntryValue(event):
 	box1.delete(0, tkinter.END)
 
-label1 = tkinter.Label(text='game of reversi', foreground='#ff0000', background='#ffaacc')
+def check(event):
+	global val1
+	global val2
+	text = ""
+	if val1.get() == True:
+		text += "AI checked\n"
+	else: 
+		text += "AI not-checked\n"
+	if val2.get() == True:
+		text += "human checked\n"
+	else:
+		text += "human not-checked\n"
+	messagebox.showinfo('info', text)
+
+label1 = tkinter.Label(text="fumi's reversi", foreground='#0000ff', background='#aaccff')
 label1.pack()
 #label1.place(x=350, y=350)
 
@@ -21,10 +36,18 @@ button1 = tkinter.Button(text='delete', width=10)
 button1.bind("<Button-1>", DeleteEntryValue)
 button1.pack()
 
-check1 = tkinter.Checkbutton(text='vs AI')
+val1 = tkinter.BooleanVar()
+val2 = tkinter.BooleanVar()
+val1.set(True)
+val2.set(False)
+check1 = tkinter.Checkbutton(text='vs AI', variable=val1)
 check1.pack()
-check2 = tkinter.Checkbutton(text='vs human')
+check2 = tkinter.Checkbutton(text='vs human', variable=val2)
 check2.pack()
+
+button2 = tkinter.Button(text='select', width=10)
+button2.bind("<Button-1>", check)
+button2.pack()
 
 panel.mainloop()
 
