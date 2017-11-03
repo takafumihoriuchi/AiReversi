@@ -29,12 +29,14 @@ canvas.create_image(450,450,image=shiro)
 canvas.create_image(350,450,image=kuro)
 canvas.create_image(450,350,image=kuro)
 
+
 whos = -1 # -1->balck, 1->white # better not to use global argument
 def draw_stone(event):
 	global whos
 	placex = int(event.x/100)*100+50
 	placey = int(event.y/100)*100+50
-	if map[int((placex - 50) / 100)][int((placey - 50) / 100)] == 0:
+	count = count_up(placex, placey, whos)
+	if (map[int((placex - 50) / 100)][int((placey - 50) / 100)] == 0) and (count!=0):
 		if whos==1:
 			canvas.create_image(placex, placey, image=shiro)
 			flip_stone(placex, placey, 1, shiro)
@@ -43,6 +45,85 @@ def draw_stone(event):
 			canvas.create_image(placex, placey, image=kuro)
 			flip_stone(placex, placey, -1, kuro)
 			whos = 1
+
+
+
+def count_up(placex, placey, color):
+	x = int((placex - 50) / 100)
+	y = int((placey - 50) / 100)
+	count = 0
+
+	for i in range(x+1,8): #right
+		if (map[i][y]==color):
+			for ii in range(x+1,i):
+				count+=1
+			break
+		elif (map[i][y]==0):
+			break
+	
+	for i in range(x-1,-1,-1): #left
+		if (map[i][y]==color):
+			for ii in range(x-1,i,-1):
+				count+=1
+			break
+		elif (map[i][y]==0):
+			break
+	
+	for j in range(y+1,8): #down
+		if (map[x][j]==color):
+			for jj in range(y+1,j):
+				count+=1
+			break
+		elif (map[x][j]==0):
+			break
+	
+	for j in range(y-1,-1,-1): #up
+		if (map[x][j]==color):
+			for jj in range(y-1,j,-1):
+				count+=1
+			break
+		elif (map[x][j]==0):
+			break
+	
+	v = min(7-x,y) #right-upper
+	for i in range(1,v+1):
+		if (map[x+i][y-i]==color):
+			for ii in range(1,i):
+				count+=1
+			break
+		elif (map[x+1][y-1]==0):
+			break
+	
+	v = min(7-x,7-y) #right-lower
+	for i in range(1,v+1):
+		if (map[x+i][y+i]==color):
+			for ii in range(1,i):
+				count+=1
+			break
+		elif (map[x+1][y+1]==0):
+			break
+
+	v = min(x,y) #left-upper
+	for i in range(1,v+1):
+		if (map[x-i][y-i]==color):
+			for ii in range(1,i):
+				count+=1
+			break
+		elif (map[x-1][y-1]==0):
+			break
+
+	v = min(x,7-y) #left-lower
+	for i in range(1,v+1):
+		if (map[x-i][y+i]==color):
+			for ii in range(1,i):
+				count+=1
+			break
+		elif (map[x-1][y+1]==0):
+			break
+
+	return count
+
+
 
 def flip_stone(placex, placey, color, img):
 	x = int((placex - 50) / 100)
@@ -60,7 +141,7 @@ def flip_stone(placex, placey, color, img):
 		elif (map[i][y]==0):
 			break
 	
-	for i in range(x-1,0,-1): #left
+	for i in range(x-1,-1,-1): #left
 		if (map[i][y]==color):
 			for ii in range(x-1,i,-1):
 				map[ii][y] = color
@@ -78,7 +159,7 @@ def flip_stone(placex, placey, color, img):
 		elif (map[x][j]==0):
 			break
 	
-	for j in range(y-1,0,-1): #up
+	for j in range(y-1,-1,-1): #up
 		if (map[x][j]==color):
 			for jj in range(y-1,j,-1):
 				map[x][jj] = color
@@ -133,3 +214,11 @@ canvas.bind("<Button>", draw_stone)
 
 
 panel.mainloop()
+
+
+
+"""
+- rewrite in object-orientation
+- organize code; make it readable
+
+"""
