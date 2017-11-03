@@ -34,14 +34,15 @@ def draw_stone(event):
 	global whos
 	placex = int(event.x/100)*100+50
 	placey = int(event.y/100)*100+50
-	if whos==1:
-		canvas.create_image(placex, placey, image=shiro)
-		flip_stone(placex, placey, 1, shiro)
-		whos = -1
-	else:
-		canvas.create_image(placex, placey, image=kuro)
-		flip_stone(placex, placey, -1, kuro)
-		whos = 1
+	if map[int((placex - 50) / 100)][int((placey - 50) / 100)] == 0:
+		if whos==1:
+			canvas.create_image(placex, placey, image=shiro)
+			flip_stone(placex, placey, 1, shiro)
+			whos = -1
+		else:
+			canvas.create_image(placex, placey, image=kuro)
+			flip_stone(placex, placey, -1, kuro)
+			whos = 1
 
 def flip_stone(placex, placey, color, img):
 	x = int((placex - 50) / 100)
