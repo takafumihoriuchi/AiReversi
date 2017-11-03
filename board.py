@@ -39,11 +39,11 @@ def draw_stone(event):
 	if (map[int((placex - 50) / 100)][int((placey - 50) / 100)] == 0) and (count!=0):
 		if whos==1:
 			canvas.create_image(placex, placey, image=shiro)
-			flip_stone(placex, placey, 1, shiro)
+			flip_stone(placex, placey, whos, shiro)
 			whos = -1
 		else:
 			canvas.create_image(placex, placey, image=kuro)
-			flip_stone(placex, placey, -1, kuro)
+			flip_stone(placex, placey, whos, kuro)
 			whos = 1
 
 
