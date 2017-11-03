@@ -1,6 +1,15 @@
 import sys
 import tkinter
 
+map = [	[0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0],
+		[0,0,0,1,-1,0,0,0],
+		[0,0,0,-1,1,0,0,0],
+		[0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0]]
+
 panel = tkinter.Tk()
 panel.title("fumi's")
 panel.geometry("804x804")
@@ -20,8 +29,104 @@ canvas.create_image(450,450,image=shiro)
 canvas.create_image(350,450,image=kuro)
 canvas.create_image(450,350,image=kuro)
 
+whos = -1 # -1->balck, 1->white # better not to use global argument
 def draw_stone(event):
-	canvas.create_image(int(event.x/100)*100+50, int(event.y/100)*100+50, image=shiro)
+	global whos
+	placex = int(event.x/100)*100+50
+	placey = int(event.y/100)*100+50
+	if whos==1:
+		canvas.create_image(placex, placey, image=shiro)
+		flip_stone(placex, placey, 1, shiro)
+		whos = -1
+	else:
+		canvas.create_image(placex, placey, image=kuro)
+		flip_stone(placex, placey, -1, kuro)
+		whos = 1
+
+def flip_stone(placex, placey, color, img):
+	x = int((placex - 50) / 100)
+	y = int((placey - 50) / 100)
+	map[x][y] = color
+	
+	#flip stones on right, left, down, up
+
+	for i in range(x+1,8): #right
+		if (map[i][y]==color):
+			for ii in range(x+1,i):
+				map[ii][y] = color
+				canvas.create_image(ii*100+50, y*100+50, image=img) #better to delete the old image
+			break
+		elif (map[i][y]==0):
+			break
+	
+	for i in range(x-1,0,-1): #left
+		if (map[i][y]==color):
+			for ii in range(x-1,i,-1):
+				map[ii][y] = color
+				canvas.create_image(ii*100+50, y*100+50, image=img) #better to delete the old image
+			break
+		elif (map[i][y]==0):
+			break
+	
+	for j in range(y+1,8): #down
+		if (map[x][j]==color):
+			for jj in range(y+1,j):
+				map[x][jj] = color
+				canvas.create_image(x*100+50, jj*100+50, image=img) #better to delete the old image
+			break
+		elif (map[x][j]==0):
+			break
+	
+	for j in range(y-1,0,-1): #up
+		if (map[x][j]==color):
+			for jj in range(y-1,j,-1):
+				map[x][jj] = color
+				canvas.create_image(x*100+50, jj*100+50, image=img) #better to delete the old image
+			break
+		elif (map[x][j]==0):
+			break
+	
+	#flip stones on diagonals
+	
+	v = min(7-x,y) #right-upper
+	for i in range(1,v+1):
+		if (map[x+i][y-i]==color):
+			for ii in range(1,i):
+				map[x+ii][y-ii] = color
+				canvas.create_image((x+ii)*100+50, (y-ii)*100+50, image=img)
+			break
+		elif (map[x+1][y-1]==0):
+			break
+	
+	v = min(7-x,7-y) #right-lower
+	for i in range(1,v+1):
+		if (map[x+i][y+i]==color):
+			for ii in range(1,i):
+				map[x+ii][y+ii] = color
+				canvas.create_image((x+ii)*100+50, (y+ii)*100+50, image=img)
+			break
+		elif (map[x+1][y+1]==0):
+			break
+
+	v = min(x,y) #left-upper
+	for i in range(1,v+1):
+		if (map[x-i][y-i]==color):
+			for ii in range(1,i):
+				map[x-ii][y-ii] = color
+				canvas.create_image((x-ii)*100+50, (y-ii)*100+50, image=img)
+			break
+		elif (map[x-1][y-1]==0):
+			break
+
+	v = min(x,7-y) #left-lower
+	for i in range(1,v+1):
+		if (map[x-i][y+i]==color):
+			for ii in range(1,i):
+				map[x-ii][y+ii] = color
+				canvas.create_image((x-ii)*100+50, (y+ii)*100+50, image=img)
+			break
+		elif (map[x-1][y+1]==0):
+			break
 
 canvas.bind("<Button>", draw_stone)
 
