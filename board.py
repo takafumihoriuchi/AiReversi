@@ -62,18 +62,17 @@ def draw_stone(event):
 						white_cnt+=1
 					elif map[i][j]==-1:
 						black_cnt+=1
-			print("GAME FINISHED\nRESULT: ")
-			print("white : " + str(white_cnt) +"\nblack : " + str(black_cnt))
+			print("GAME FINISHED\nRESULT")
+			print("white:\t" + str(white_cnt) +"\nblack:\t" + str(black_cnt))
 			if (white_cnt>black_cnt):
-				print("WINNER : white")
+				print("WINNER:\twhite")
 			elif (black_cnt>white_cnt):
-				print("WINNER : black")
+				print("WINNER:\tblack")
 			else:
 				print("DRAW")
-			#return
+			sys.exit()
 			"""
 			must modify so that all the possible spaces get filled, switching and skipping turns
-			also to end the program when finished
 			"""
 
 def count_up(placex, placey, color):
