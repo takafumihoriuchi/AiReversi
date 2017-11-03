@@ -258,5 +258,5 @@ panel.mainloop()
 """
 - rewrite in object-orientation
 - organize code; make it readable
-
+- 保守などのことを考えて、整理されたコードで書く必要がある。デザインパターン、設計原則を意識する。
 """
