@@ -51,9 +51,20 @@ def draw_stone(event):
 			for j in range(0,8):
 				if map[i][j]==0:
 					end = count_up(i*100+50,j*100+50,whos)
-					if end!=0:
+					if end!=0: # if there still are possible spaces left
 						return
-		if end==0:
+		if end==0: # no possible space to put stone
+			
+			#the following block checks whether the opponent can put their stone at spaces left
+			end = 0 #reset end
+			for i in range(0,8):
+				for j in range(0,8):
+					if map[i][j]==0:
+						end = count_up(i*100+50,j*100+50,whos*-1)
+						if end!=0: # if there still are possible spaces left
+							whos *= -1
+							return
+			#no possible choice for both player; end of game
 			white_cnt=0
 			black_cnt=0
 			for i in range(0,8):
