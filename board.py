@@ -45,8 +45,36 @@ def draw_stone(event):
 			canvas.create_image(placex, placey, image=kuro)
 			flip_stone(placex, placey, whos, kuro)
 			whos = 1
-
-
+	else:
+		end = 0
+		for i in range(0,8):
+			for j in range(0,8):
+				if map[i][j]==0:
+					end = count_up(i*100+50,j*100+50,whos)
+					if end!=0:
+						return
+		if end==0:
+			white_cnt=0
+			black_cnt=0
+			for i in range(0,8):
+				for j in range(0,8):
+					if map[i][j]==1:
+						white_cnt+=1
+					elif map[i][j]==-1:
+						black_cnt+=1
+			print("GAME FINISHED\nRESULT: ")
+			print("white : " + str(white_cnt) +"\nblack : " + str(black_cnt))
+			if (white_cnt>black_cnt):
+				print("WINNER : white")
+			elif (black_cnt>white_cnt):
+				print("WINNER : black")
+			else:
+				print("DRAW")
+			#return
+			"""
+			must modify so that all the possible spaces get filled, switching and skipping turns
+			also to end the program when finished
+			"""
 
 def count_up(placex, placey, color):
 	x = int((placex - 50) / 100)
