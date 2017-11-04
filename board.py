@@ -34,6 +34,13 @@ ai_x = 0
 ai_y = 0
 def ai_calc(whos): #algorithm of ai comes here
 	global ai_x, ai_y
+	#see the corners
+	for i in range(0,2):
+		for j in range(0,2):
+			if count_up((i*7)*100+50, (j*7)*100+50, whos)!=0:
+				ai_x = i*7
+				ai_y = j*7
+				return 1
 	max_count = 0
 	for i in range(0,8):
 		placex = i*100+50
@@ -82,7 +89,7 @@ def draw_stone(event):
 				canvas.create_image(ai_x*100+50, ai_y*100+50, image=shiro)
 				flip_stone(ai_x*100+50, ai_y*100+50, whos, shiro)
 				whos = -1
-			else:
+			else: #if there are no place that the ai can put
 				finish_check()
 			#ai moves until here
 	#if (there aren't any places to place stone left):
