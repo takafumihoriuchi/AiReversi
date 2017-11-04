@@ -1,6 +1,7 @@
 import sys
 import tkinter
 from time import sleep
+import random
 
 map = [	[0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0],
@@ -50,14 +51,25 @@ def ai_calc(whos): #algorithm of ai comes here
 			placey = j*100+50
 			if map[i][j]==0:
 				max_count = max(max_count, count_up(placex, placey, whos) ) # 1 represents the color of the ai stone
-	for i in range(0,8):
-		placex = i*100+50
-		for j in range(0,8):
-			placey = j*100+50
-			if map[i][j]==0 and count_up(placex, placey, whos)==max_count:
-				ai_x = i
-				ai_y = j
-				return max_count
+	rnd = random.randint(1,2)
+	if (rnd==1):
+		for i in range(0,8):
+			placex = i*100+50
+			for j in range(0,8):
+				placey = j*100+50
+				if map[i][j]==0 and count_up(placex, placey, whos)==max_count:
+					ai_x = i
+					ai_y = j
+					return max_count
+	else:
+		for i in range(7,-1,-1):
+			placex = i*100+50
+			for j in range(7,-1,-1):
+				placey = j*100+50
+				if map[i][j]==0 and count_up(placex, placey, whos)==max_count:
+					ai_x = i
+					ai_y = j
+					return max_count
 
 
 #since black does the first move (according to the rule), set black as the player
@@ -311,5 +323,6 @@ panel.mainloop()
 - rewrite in object-orientation
 - organize code; make it readable
 - 保守などのことを考えて、整理されたコードで書く必要がある。デザインパターン、設計原則を意識する。
+- アルゴリズムは間違っていないと思われる。しかし、まるでmapが更新されていないかのように、上書きされてしまう時がある。
 - 時間のラグが発生しているのは、おそらくpanel.mainloop()を回している中で、関数などを使用しているから。
 """
