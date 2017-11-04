@@ -1,5 +1,6 @@
 import sys
 import tkinter
+import time
 
 map = [	[0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0],
@@ -31,22 +32,23 @@ canvas.create_image(450,350,image=kuro)
 
 ai_x = 0
 ai_y = 0
-def ai_calc(): #algorithm of ai comes here
+def ai_calc(whos): #algorithm of ai comes here
 	global ai_x, ai_y
 	max_count = 0
 	for i in range(0,8):
 		placex = i*100+50
 		for j in range(0,8):
 			placey = j*100+50
-			max_count = max(max_count, count_up(placex, placey, 1) ) # 1 represents the color of the ai stone
+			if map[i][j]==0:
+				max_count = max(max_count, count_up(placex, placey, whos) ) # 1 represents the color of the ai stone
 	for i in range(0,8):
 		placex = i*100+50
 		for j in range(0,8):
 			placey = j*100+50
-			if count_up(placex, placey, 1)==max_count:
+			if map[i][j]==0 and count_up(placex, placey, whos)==max_count:
 				ai_x = i
 				ai_y = j
-				return
+				return max_count
 
 
 #since black does the first move (according to the rule), set black as the player
@@ -59,69 +61,74 @@ def draw_stone(event):
 	#if (there are places to put stone):
 	if (map[int((placex - 50) / 100)][int((placey - 50) / 100)] == 0) and (count!=0):
 		if whos==1: #white, computer's turn
-			"""
-			global ai_x, ai_y	#
-			ai_calc()			#
-			palcex = ai_x*100+50#
-			placey = ai_y*100+50#
-			canvas.create_image(placex, placey, image=shiro)
-			flip_stone(placex, placey, whos, shiro)
-			whos = -1
-			"""
+			print("dead branch")
+			# this is a dead branching from two player code
 		else: #whos==-1, black, player's turn
 			canvas.create_image(placex, placey, image=kuro)
 			flip_stone(placex, placey, whos, kuro)
 			whos = 1
 			#ai moves from below
 			global ai_x, ai_y	#
-			ai_calc()			#
-			palcex = ai_x*100+50#
-			placey = ai_y*100+50#
-			canvas.create_image(placex, placey, image=shiro)
-			flip_stone(placex, placey, whos, shiro)
-			whos = -1
+			#time.sleep(1) #wait for 1 sec
+			ai_possible = ai_calc(whos)	#
+			print("ai_possible: " + str(ai_possible))
+			if (ai_possible != 0):
+				#palcex = ai_x*100+50#
+				print("ai_x: " + str(ai_x))
+				#placey = ai_y*100+50#
+				print("ai_y: " + str(ai_y))
+				#canvas.create_image(placex, placey, image=shiro)
+				#flip_stone(placex, placey, whos, shiro)
+				canvas.create_image(ai_x*100+50, ai_y*100+50, image=shiro)
+				flip_stone(ai_x*100+50, ai_y*100+50, whos, shiro)
+				whos = -1
+			else:
+				finish_check()
 			#ai moves until here
 	#if (there aren't any places to place stone left):
 	else:
-		end = 0
+		finish_check()
+			
+
+def finish_check():
+	global whos
+	end = 0
+	for i in range(0,8):
+		for j in range(0,8):
+			if map[i][j]==0:
+				end = count_up(i*100+50,j*100+50,whos)
+				if end!=0: # if there still are possible spaces left
+					return
+	if end==0: # no possible space to put stone
+		#the following block checks whether the opponent can put their stone at spaces left
+		#end = 0 #reset end
 		for i in range(0,8):
 			for j in range(0,8):
 				if map[i][j]==0:
-					end = count_up(i*100+50,j*100+50,whos)
+					end = count_up(i*100+50,j*100+50,whos*-1)
 					if end!=0: # if there still are possible spaces left
+						whos *= -1
 						return
-		if end==0: # no possible space to put stone
-			
-			#the following block checks whether the opponent can put their stone at spaces left
-			end = 0 #reset end
-			for i in range(0,8):
-				for j in range(0,8):
-					if map[i][j]==0:
-						end = count_up(i*100+50,j*100+50,whos*-1)
-						if end!=0: # if there still are possible spaces left
-							whos *= -1
-							return
-			#no possible choice for both player; end of game
-			white_cnt=0
-			black_cnt=0
-			for i in range(0,8):
-				for j in range(0,8):
-					if map[i][j]==1:
-						white_cnt+=1
-					elif map[i][j]==-1:
-						black_cnt+=1
-			print("\nGAME FINISHED\nRESULT")
-			print("white:\t" + str(white_cnt) +"\nblack:\t" + str(black_cnt))
-			if (white_cnt>black_cnt):
-				print("WINNER:\twhite\n")
-			elif (black_cnt>white_cnt):
-				print("WINNER:\tblack\n")
-			else:
-				print("DRAW\n")
-			sys.exit()
-			"""
-			must modify so that all the possible spaces get filled, switching and skipping turns
-			"""
+		#no possible choice for both player; end of game
+		white_cnt=0
+		black_cnt=0
+		for i in range(0,8):
+			for j in range(0,8):
+				if map[i][j]==1:
+					white_cnt+=1
+				elif map[i][j]==-1:
+					black_cnt+=1
+		print("\nGAME FINISHED\nRESULT")
+		print("white:\t" + str(white_cnt) +"\nblack:\t" + str(black_cnt))
+		if (white_cnt>black_cnt):
+			print("WINNER:\twhite\n")
+		elif (black_cnt>white_cnt):
+			print("WINNER:\tblack\n")
+		else:
+			print("DRAW\n")
+		sys.exit()
+
+
 #return the number of stones that can be flipped, in response to arguments placex and placey 
 def count_up(placex, placey, color):
 	x = int((placex - 50) / 100)
