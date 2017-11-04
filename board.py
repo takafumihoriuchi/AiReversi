@@ -29,22 +29,59 @@ canvas.create_image(450,450,image=shiro)
 canvas.create_image(350,450,image=kuro)
 canvas.create_image(450,350,image=kuro)
 
+ai_x = 0
+ai_y = 0
+def ai_calc(): #algorithm of ai comes here
+	global ai_x, ai_y
+	max_count = 0
+	for i in range(0,8):
+		placex = i*100+50
+		for j in range(0,8):
+			placey = j*100+50
+			max_count = max(max_count, count_up(placex, placey, 1) ) # 1 represents the color of the ai stone
+	for i in range(0,8):
+		placex = i*100+50
+		for j in range(0,8):
+			placey = j*100+50
+			if count_up(placex, placey, 1)==max_count:
+				ai_x = i
+				ai_y = j
+				return
 
+
+#since black does the first move (according to the rule), set black as the player
 whos = -1 # -1->balck, 1->white # better not to use global argument
 def draw_stone(event):
 	global whos
 	placex = int(event.x/100)*100+50
 	placey = int(event.y/100)*100+50
 	count = count_up(placex, placey, whos)
+	#if (there are places to put stone):
 	if (map[int((placex - 50) / 100)][int((placey - 50) / 100)] == 0) and (count!=0):
-		if whos==1:
+		if whos==1: #white, computer's turn
+			"""
+			global ai_x, ai_y	#
+			ai_calc()			#
+			palcex = ai_x*100+50#
+			placey = ai_y*100+50#
 			canvas.create_image(placex, placey, image=shiro)
 			flip_stone(placex, placey, whos, shiro)
 			whos = -1
-		else:
+			"""
+		else: #whos==-1, black, player's turn
 			canvas.create_image(placex, placey, image=kuro)
 			flip_stone(placex, placey, whos, kuro)
 			whos = 1
+			#ai moves from below
+			global ai_x, ai_y	#
+			ai_calc()			#
+			palcex = ai_x*100+50#
+			placey = ai_y*100+50#
+			canvas.create_image(placex, placey, image=shiro)
+			flip_stone(placex, placey, whos, shiro)
+			whos = -1
+			#ai moves until here
+	#if (there aren't any places to place stone left):
 	else:
 		end = 0
 		for i in range(0,8):
@@ -85,7 +122,7 @@ def draw_stone(event):
 			"""
 			must modify so that all the possible spaces get filled, switching and skipping turns
 			"""
-
+#return the number of stones that can be flipped, in response to arguments placex and placey 
 def count_up(placex, placey, color):
 	x = int((placex - 50) / 100)
 	y = int((placey - 50) / 100)
