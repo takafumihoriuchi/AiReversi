@@ -1,6 +1,6 @@
 import sys
 import tkinter
-import time
+from time import sleep
 
 map = [	[0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0],
@@ -37,10 +37,12 @@ def ai_calc(whos): #algorithm of ai comes here
 	#see the corners
 	for i in range(0,2):
 		for j in range(0,2):
-			if count_up((i*7)*100+50, (j*7)*100+50, whos)!=0:
-				ai_x = i*7
-				ai_y = j*7
-				return 1
+			if (map[i*7][j*7] == 0):
+				cnt = count_up((i*7)*100+50, (j*7)*100+50, whos)
+				if (cnt != 0):
+					ai_x = i*7
+					ai_y = j*7
+					return cnt
 	max_count = 0
 	for i in range(0,8):
 		placex = i*100+50
@@ -125,14 +127,14 @@ def finish_check():
 					white_cnt+=1
 				elif map[i][j]==-1:
 					black_cnt+=1
-		print("\nGAME FINISHED\nRESULT")
+		print("\n-------------\nGAME FINISHED\nRESULT")
 		print("white:\t" + str(white_cnt) +"\nblack:\t" + str(black_cnt))
 		if (white_cnt>black_cnt):
-			print("WINNER:\twhite\n")
+			print("WINNER:\twhite\n-------------\n")
 		elif (black_cnt>white_cnt):
-			print("WINNER:\tblack\n")
+			print("WINNER:\tblack\n-------------\n")
 		else:
-			print("DRAW\n")
+			print("DRAW\n-------------\n")
 		sys.exit()
 
 
@@ -301,7 +303,6 @@ def flip_stone(placex, placey, color, img):
 
 canvas.bind("<Button>", draw_stone)
 
-
 panel.mainloop()
 
 
@@ -310,8 +311,5 @@ panel.mainloop()
 - rewrite in object-orientation
 - organize code; make it readable
 - 保守などのことを考えて、整理されたコードで書く必要がある。デザインパターン、設計原則を意識する。
-
-- 角は優先度高め（先に探索する）
-- 角の隣は（３箇所）優先度低め
-- 上の条件を考慮した上で、最も多くの石をひっくり返せる箇所を選択する
+- 時間のラグが発生しているのは、おそらくpanel.mainloop()を回している中で、関数などを使用しているから。
 """
