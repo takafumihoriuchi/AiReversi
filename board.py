@@ -73,14 +73,14 @@ def draw_stone(event):
 						white_cnt+=1
 					elif map[i][j]==-1:
 						black_cnt+=1
-			print("GAME FINISHED\nRESULT")
+			print("\nGAME FINISHED\nRESULT")
 			print("white:\t" + str(white_cnt) +"\nblack:\t" + str(black_cnt))
 			if (white_cnt>black_cnt):
-				print("WINNER:\twhite")
+				print("WINNER:\twhite\n")
 			elif (black_cnt>white_cnt):
-				print("WINNER:\tblack")
+				print("WINNER:\tblack\n")
 			else:
-				print("DRAW")
+				print("DRAW\n")
 			sys.exit()
 			"""
 			must modify so that all the possible spaces get filled, switching and skipping turns
@@ -259,4 +259,8 @@ panel.mainloop()
 - rewrite in object-orientation
 - organize code; make it readable
 - 保守などのことを考えて、整理されたコードで書く必要がある。デザインパターン、設計原則を意識する。
+
+- 角は優先度高め（先に探索する）
+- 角の隣は（３箇所）優先度低め
+- 上の条件を考慮した上で、最も多くの石をひっくり返せる箇所を選択する
 """
