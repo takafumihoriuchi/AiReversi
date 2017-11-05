@@ -31,6 +31,10 @@ canvas.create_image(450,450,image=shiro)
 canvas.create_image(350,450,image=kuro)
 canvas.create_image(450,350,image=kuro)
 
+def print_board(board):
+	for row in board:
+		print(row)
+
 ai_x = 0
 ai_y = 0
 def ai_calc(whos): #algorithm of ai comes here
@@ -87,6 +91,7 @@ def draw_stone(event):
 		else: #whos==-1, black, player's turn
 			canvas.create_image(placex, placey, image=kuro)
 			flip_stone(placex, placey, whos, kuro)
+			print_board(map)
 			whos = 1
 			#ai moves from below
 			global ai_x, ai_y	#
@@ -102,6 +107,7 @@ def draw_stone(event):
 				#flip_stone(placex, placey, whos, shiro)
 				canvas.create_image(ai_x*100+50, ai_y*100+50, image=shiro)
 				flip_stone(ai_x*100+50, ai_y*100+50, whos, shiro)
+				print_board(map)
 				whos = -1
 			else: #if there are no place that the ai can put
 				finish_check()
