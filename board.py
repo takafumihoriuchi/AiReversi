@@ -1,7 +1,7 @@
 import sys
 import tkinter
 from time import sleep
-import random
+from random import randint
 
 map = [	[0,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0],
@@ -55,7 +55,7 @@ def ai_calc(whos): #algorithm of ai comes here
 			placey = j*100+50
 			if map[i][j]==0:
 				max_count = max(max_count, count_up(placex, placey, whos) ) # 1 represents the color of the ai stone
-	rnd = random.randint(1,2)
+	rnd = randint(1,2)
 	if (rnd==1):
 		for i in range(0,8):
 			placex = i*100+50
