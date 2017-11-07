@@ -1,3 +1,4 @@
+#code of algorithm in which the ai looks at the corners, then simply places on the point that can get highest return in that very round
 import sys
 import tkinter
 from time import sleep
