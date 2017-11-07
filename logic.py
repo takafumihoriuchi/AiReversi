@@ -2,16 +2,17 @@
 
 class Board(object):
   board = []
-  def __init__(self, row, col):
+  def __init__(self, row, col, blank):
     self.row = row
     self.col = col
+    self.blank = blank
   
   def createBoard(self):
     for i in range(self.row):
-      self.board.append(["O"]*self.col) #initialize board with "O" to represent open space
+      self.board.append([self.blank]*self.col) #initialize board with "O" to represent open space
 
   def setBoard(self, row, col, color):
-    self.board[row][col] = color
+    self.board[row][col] = color #these row and col are different from the row and col from self.row and self.col declared in method __init__()
   
   def printBoard(self):
     print()
@@ -42,14 +43,31 @@ class Player(object):
     self.flipStone()
 
   def flipStone(self):
-    pass
-
+    #down
+    for i in range(self.row+1, my_board.row): #this will not be executed if self.row is out of range
+      if my_board.board[i][self.col]==self.color:
+        for ii in range(self.row+1, i):
+          my_board.board[ii][self.col] = self.color
+        break
+      elif my_board.board[i][self.col]==my_board.blank:
+        break
+    #right
+    for i in range(self.col+1, my_board.col):
+      if my_board.board[self.row][i]==self.color:
+        for ii in range(self.col+1, i):
+          my_board.board[self.row][ii] = self.color
+        break
+      elif my_board.board[self.row][i]==my_board.blank:
+        break
+    #up
+    for i in range(self.row-1,-1,-1):
+      pass
 
 class ArtificialIntelligence(Player):
   pass
 
 
-my_board = Board(8,8)
+my_board = Board(8,8,"O")
 my_board.createBoard()
 my_board.setBoard(4,3,"B")
 my_board.setBoard(3,4,"B")
