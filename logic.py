@@ -20,7 +20,15 @@ class Board(object):
       print("  ".join(i))
     print()
 
-  def endCheck(self, color):
+  def possibleChoice(self, color):
+    possibility = 0
+    for i in range(self.row):
+      for j in range(self.col):
+        if self.countUp(self.board[i][j])>0:
+          possibility+=1
+    return possibility
+
+  def gameSet(self):
     pass
 
 
@@ -217,10 +225,10 @@ class ArtificialIntelligence(Player):
               max_count = count
               self.row = i
               self.col = j
-      if max_count>0: #(could also be written " if max_count: " )
+      if max_count>0:
         self.putStone()
       else: #if there are no possible choices left
-        my_board.endCheck(self.color)
+        pass
 
 
 my_board = Board(8,8,"O")
@@ -233,11 +241,20 @@ my_board.setBoard(3,3,my_ai.color)
 my_board.setBoard(4,4,my_ai.color)
 
 while True:
-  my_board.printBoard()
-  my_player.selectPoint()
-  my_board.printBoard()
-  my_ai.aiCalculate()
+  if my_board.possibleChoice(my_player.color)>0:
+    my_board.printBoard()
+    my_player.selectPoint()
+  else:
+    if not my_board.possibleChoice(my_ai.color)>0:
+      my_board.gameSet()
+  if my_board.possibleChoice(my_ai.color)>0:
+    my_board.printBoard()
+    my_ai.aiCalculate()
+  else:
+    if not my_board.possibleChoice(my_player.color)>0:
+      my_board.gameSet()
 
 """
 - end process
+- function countUp() should have been defined in class Board
 """
