@@ -39,7 +39,11 @@ class Player(object):
       print("invalid input (out of range)")
       self.selectPoint()
     elif self.my_board.board[self.row][self.col]==my_board.blank:
-      self.my_board.board[self.row][self.col] = self.color
+      if self.countUp(self.row, self.col)>0:
+        self.my_board.board[self.row][self.col] = self.color
+      else:
+        print("invalid input (unflippable)")
+        self.selectPoint()
     else:
       print("invalid input (already taken)")
       self.selectPoint()
@@ -67,7 +71,7 @@ class Player(object):
       if my_board.board[i][self.col]==self.color:
         for ii in range(self.row-1,i,-1):
           my_board.board[ii][self.col] = self.color
-          break
+        break
       elif my_board.board[i][self.col]==my_board.blank:
         break
     #left
@@ -115,37 +119,6 @@ class Player(object):
       elif my_board.board[self.row-i][self.col+i]==my_board.blank:
         break
 
-
-class ArtificialIntelligence(Player):
-  def aiCalculate(self):
-    #check the four-corners first
-    max_count = 0
-    for i in range(2):
-      for j in range(2):
-        if my_board.board[i*(my_board.row-1)][j*(my_board.col-1)]==my_board.blank:
-          count = self.countUp(i,j)
-          if count>max_count:
-            max_count = count
-            self.row = i
-            self.col = j
-    if max_count>0:
-      self.putStone()
-    else:
-      #select point to get highest return in that round (if multiple choice, select point that appears first)
-      max_count = 0
-      for i in range(my_board.row):
-        for j in range(my_board.col):
-          if my_board.board[i][j]==my_board.blank:
-            count = self.countUp(i,j)
-            if count>max_count:
-              max_count = count
-              self.row = i
-              self.col = j
-      if max_count>0: #(could also be written " if max_count: " )
-        self.putStone()
-      else: #if there are no possible choices
-        my_board.endCheck(self.color)
-
   def countUp(self, row, col):
     count=0
     #down
@@ -169,7 +142,7 @@ class ArtificialIntelligence(Player):
       if my_board.board[i][col]==self.color:
         for ii in range(row-1,i,-1):
           count+=1
-          break
+        break
       elif my_board.board[i][col]==my_board.blank:
         break
     #left
@@ -218,6 +191,38 @@ class ArtificialIntelligence(Player):
         break
     return count
 
+
+class ArtificialIntelligence(Player):
+  def aiCalculate(self):
+    #check the four-corners first
+    max_count = 0
+    for i in range(2):
+      for j in range(2):
+        if my_board.board[i*(my_board.row-1)][j*(my_board.col-1)]==my_board.blank:
+          count = self.countUp(i,j)
+          if count>max_count:
+            max_count = count
+            self.row = i
+            self.col = j
+    if max_count>0:
+      self.putStone()
+    else:
+      #select point to get highest return in that round (if multiple choice, select point that appears first)
+      max_count = 0
+      for i in range(my_board.row):
+        for j in range(my_board.col):
+          if my_board.board[i][j]==my_board.blank:
+            count = self.countUp(i,j)
+            if count>max_count:
+              max_count = count
+              self.row = i
+              self.col = j
+      if max_count>0: #(could also be written " if max_count: " )
+        self.putStone()
+      else: #if there are no possible choices
+        my_board.endCheck(self.color)
+
+
 my_board = Board(8,8,"O")
 my_board.createBoard()
 my_board.setBoard(4,3,"B")
@@ -237,6 +242,5 @@ while True:
   my_board.printBoard()
 
 """
-- only allow player to put in places where they can flip stones
 - end process
 """
