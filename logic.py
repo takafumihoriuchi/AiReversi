@@ -10,7 +10,7 @@ class Board(object):
   
   def createBoard(self):
     for i in range(self.row):
-      self.board.append([self.blank]*self.col) #initialize board with "O" to represent open space
+      self.board.append([self.blank]*self.col)
 
   def setBoard(self, set_row, set_col, color):
     self.board[set_row][set_col] = color
@@ -245,12 +245,12 @@ class ArtificialIntelligence(Player):
               max_count = count
               self.row = i
               self.col = j
-      if max_count>0: #not necessarily needed
+      if max_count>0:
         self.putStone()
 
 
-my_board = Board(8,8,"O")
-my_player = Player("B", my_board) #set my_player.color to "B" to represent black
+my_board = Board(8,8,"O")                     #initialize board with "O" to represent open space
+my_player = Player("B", my_board)             #set my_player.color to "B" to represent black
 my_ai = ArtificialIntelligence("W", my_board) #set my_ai.color to "W" to represent white
 my_board.createBoard()
 my_board.setBoard(4,3,my_player.color)
