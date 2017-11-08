@@ -11,8 +11,8 @@ class Board(object):
     for i in range(self.row):
       self.board.append([self.blank]*self.col) #initialize board with "O" to represent open space
 
-  def setBoard(self, row, col, color):
-    self.board[row][col] = color #these row and col are different from the row and col from self.row and self.col declared in method __init__()
+  def setBoard(self, set_row, set_col, color):
+    self.board[set_row][set_col] = color
   
   def printBoard(self):
     print()
@@ -61,7 +61,57 @@ class Player(object):
         break
     #up
     for i in range(self.row-1,-1,-1):
-      pass
+      if my_board.board[i][self.col]==self.color:
+        for ii in range(self.row-1,i,-1):
+          my_board.board[ii][self.col] = self.color
+          break
+      elif my_board.board[i][self.col]==my_board.blank:
+        break
+    #left
+    for i in range(self.col-1,-1,-1):
+      if my_board.board[self.row][i]==self.color:
+        for ii in range(self.col-1,i,-1):
+          my_board.board[self.row][ii] = self.color
+        break
+      elif my_board.board[self.row][i]==my_board.blank:
+        break
+    #left-upper
+    limit = min(self.row, self.col)
+    for i in range(1,limit+1):
+      if my_board.board[self.row-i][self.col-i]==self.color:
+        for ii in range(1,i):
+          my_board.board[self.row-ii][self.col-ii] = self.color
+        break
+      elif my_board.board[self.row-1][self.col-1]==my_board.blank:
+        break
+    #right-lower
+    limit = min(my_board.row-self.row, my_board.col-self.col)
+    for i in range(1,limit):
+      if my_board.board[self.row+i][self.col+i]==self.color:
+        for ii in range(1,i):
+          my_board.board[self.row+ii][self.col+ii] = self.color
+        break
+      elif my_board.board[self.row+i][self.col+i]==my_board.blank:
+        break
+    #left-lower
+    limit = min(my_board.row-self.row, self.col+1)
+    for i in range(1,limit):
+      if my_board.board[self.row+i][self.col-i]==self.color:
+        for ii in range(1,i):
+          my_board.board[self.row+ii][self.col-ii] = self.color
+        break
+      elif my_board.board[self.row+i][self.col-i]==my_board.blank:
+        break
+    #right-upper
+    limit = min(self.row+1, my_board.col-self.col)
+    for i in range(1,limit):
+      if my_board.board[self.row-i][self.col+i]==self.color:
+        for ii in range(1,i):
+          my_board.board[self.row-ii][self.col+ii] = self.color
+        break
+      elif my_board.board[self.row-i][self.col+i]==my_board.blank:
+        break
+
 
 class ArtificialIntelligence(Player):
   pass
