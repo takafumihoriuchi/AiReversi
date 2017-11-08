@@ -199,15 +199,15 @@ class ArtificialIntelligence(Player):
     for i in range(2):
       for j in range(2):
         if my_board.board[i*(my_board.row-1)][j*(my_board.col-1)]==my_board.blank:
-          count = self.countUp(i,j)
+          count = self.countUp(i*(my_board.row-1),j*(my_board.col-1))
           if count>max_count:
             max_count = count
-            self.row = i
-            self.col = j
+            self.row = i*(my_board.row-1)
+            self.col = j*(my_board.col-1)
     if max_count>0:
       self.putStone()
     else:
-      #select point to get highest return in that round (if multiple choice, select point that appears first)
+      #if corner not possible, select point to get highest return in that round (if multiple choice, select point that appears first)
       max_count = 0
       for i in range(my_board.row):
         for j in range(my_board.col):
@@ -219,27 +219,24 @@ class ArtificialIntelligence(Player):
               self.col = j
       if max_count>0: #(could also be written " if max_count: " )
         self.putStone()
-      else: #if there are no possible choices
+      else: #if there are no possible choices left
         my_board.endCheck(self.color)
 
 
 my_board = Board(8,8,"O")
-my_board.createBoard()
-my_board.setBoard(4,3,"B")
-my_board.setBoard(3,4,"B")
-my_board.setBoard(3,3,"W")
-my_board.setBoard(4,4,"W")
-my_board.printBoard()
-
 my_player = Player("B", my_board) #set my_player.color to "B" to represent black
 my_ai = ArtificialIntelligence("W", my_board) #set my_ai.color to "W" to represent white
+my_board.createBoard()
+my_board.setBoard(4,3,my_player.color)
+my_board.setBoard(3,4,my_player.color)
+my_board.setBoard(3,3,my_ai.color)
+my_board.setBoard(4,4,my_ai.color)
 
 while True:
-  #endCheck("B") for player comes here; how to branch
+  my_board.printBoard()
   my_player.selectPoint()
   my_board.printBoard()
   my_ai.aiCalculate()
-  my_board.printBoard()
 
 """
 - end process
