@@ -245,10 +245,8 @@ class ArtificialIntelligence(Player):
               max_count = count
               self.row = i
               self.col = j
-      if max_count>0:
+      if max_count>0: #not necessarily needed
         self.putStone()
-      else: #if there are no possible choices left
-        pass
 
 
 my_board = Board(8,8,"O")
@@ -273,7 +271,3 @@ while True:
   else:
     if not my_board.possibleChoice(my_player.color)>0:
       my_board.gameSet(my_player.color, my_ai.color)
-
-"""
-- end process
-"""
